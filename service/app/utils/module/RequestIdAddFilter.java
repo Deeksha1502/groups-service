@@ -1,6 +1,6 @@
 package utils.module;
 
-import akka.stream.Materializer;
+import org.apache.pekko.stream.Materializer;
 import com.google.inject.Inject;
 import java.util.Optional;
 import java.util.UUID;

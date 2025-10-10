@@ -13,12 +13,8 @@
     <packaging>play2</packaging>
     <repositories>
         <repository>
-            <id>scalaz-bintray</id>
-            <name>Scalaz Bintray - releases</name>
-            <url>https://dl.bintray.com/scalaz/releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>maven-central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -209,7 +205,7 @@
         </dependency>
         <dependency>
             <groupId>org.playframework</groupId>
-            <artifactId>filters-helpers_${scala.major.version}</artifactId>
+            <artifactId>play-filters-helpers_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>

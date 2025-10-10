@@ -101,7 +101,7 @@ public class BaseController extends Controller {
     ActorRef actorRef = getActorRef(request.getOperation());
     if (actorRef != null) {
       Future<Object> future = Patterns.ask(actorRef, request, timeout);
-      return FutureConverters.toJava(future).thenApplyAsync(fn);
+      return FutureConverters.asJava(future).thenApplyAsync(fn);
     } else {
       return CompletableFuture.supplyAsync(
           () -> handleResponse(new ActorServiceException.InvalidOperationName(null), request));
