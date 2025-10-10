@@ -71,43 +71,15 @@ API Compatibility: Maintained, as Pekko is API-compatible with Akka 2.6
 Code Changes: Primarily package name updates from akka to pekko
 License: Now compliant with Apache 2.0 throughout the stack
 
-## Dependency Verification
-
-Verify no Akka dependencies remain:
-```
-mvn dependency:tree | grep -i akka
-```
-
-Verify Pekko is properly integrated:
-```
-mvn dependency:tree | grep -i pekko
-```
-
-Verify no Scala 2.12 conflicts:
-```
-mvn dependency:tree | grep "scala-library:.*:2.12"
-```
 
 ## Files Modified
 
-- 4 POM files (dependency management)
-- 24 Java source files (import migrations)
-- 2 configuration files (namespace updates)
+- POM files (dependency management)
+- Java source files (import migrations)
+- Configuration files (namespace updates)
 
 ## Known Issues
 
 Test Failures: Some unit tests fail due to PowerMock compatibility with Java 11 module system. This is a known PowerMock issue unrelated to the Pekko migration. The compilation and build are fully successful.
 
 Scala Version Conflicts: If you encounter NoClassDefFoundError for scala.collection.GenMap, verify dependency tree to ensure no Scala 2.12 artifacts are present. Run mvn dependency:tree and add exclusions for any scala-library or scala-reflect with version 2.12.
-
-## Testing Recommendations
-
-1. Execute full unit test suite
-2. Run integration tests for actor communication
-3. Perform regression testing for all features
-4. Conduct performance benchmarking
-5. Test under production-like load
-
-## Build Status
-
-All modules compile successfully. Build completes without errors when using -DskipTests flag.
