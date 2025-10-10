@@ -2,7 +2,7 @@ package controllers;
 
 import static org.junit.Assert.assertEquals;
 
-import akka.actor.ActorRef;
+import org.apache.pekko.actor.ActorRef;
 import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.Ignore;

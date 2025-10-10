@@ -42,7 +42,7 @@
         </dependency>
         <!-- Add actor here itself to avoid netty jar conflict. -->
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-netty-server_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <scope>runtime</scope>
@@ -60,10 +60,10 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>4.1.44.Final</version>
+            <version>${netty.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-guice_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
@@ -76,6 +76,14 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-reflect</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -86,6 +94,14 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-reflect</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -119,10 +135,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <exclusions>
@@ -152,13 +168,13 @@
             <version>4.5.14</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-testkit_${scala.major.version}</artifactId>
-            <version>${typesafe.akka.version}</version>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-testkit_${scala.major.version}</artifactId>
+            <version>${pekko.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-        <groupId>com.typesafe.play</groupId>
+        <groupId>org.playframework</groupId>
         <artifactId>play-logback_${scala.major.version}</artifactId>
         <version>${play2.version}</version>
         </dependency>
@@ -192,13 +208,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>filters-helpers_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
-            <artifactId>play-akka-http-server_${scala.major.version}</artifactId>
+            <groupId>org.playframework</groupId>
+            <artifactId>play-pekko-http-server_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>
@@ -208,7 +224,7 @@
         </dependency>
         <!--Play Helper Class for Testing Controllers  -->
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-test_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <scope>test</scope>

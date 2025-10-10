@@ -1,8 +1,8 @@
 package org.sunbird.actors;
 
-import akka.actor.UntypedAbstractActor;
-import akka.event.DiagnosticLoggingAdapter;
-import akka.event.Logging;
+import org.apache.pekko.actor.UntypedAbstractActor;
+import org.apache.pekko.event.DiagnosticLoggingAdapter;
+import org.apache.pekko.event.Logging;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
