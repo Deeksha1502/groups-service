@@ -1,11 +1,13 @@
 <project
         xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.sunbird</groupId>
     <artifactId>sunbird-groups</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <properties>
         <project.version>1.0.0</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,22 +15,25 @@
 
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <jackson.version>2.13.5</jackson.version>
-        <typesafe.akka.version>2.5.22</typesafe.akka.version>
+
+        <jackson.version>2.14.3</jackson.version>
+        <pekko.version>1.0.3</pekko.version>
         <junit.version>4.13.2</junit.version>
         <scoverage.plugin.version>1.1.1</scoverage.plugin.version>
-        <slf4j.version>1.6.1</slf4j.version>
-        <logback.version>1.0.7</logback.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.4.14</logback.version>
         <powermock.version>2.0.9</powermock.version>
-        <play2.version>2.7.2</play2.version>
+        <play2.version>3.0.5</play2.version>
         <play2.plugin.version>1.0.0-rc5</play2.plugin.version>
-        <scala.major.version>2.12</scala.major.version>
-        <scala.version>2.12.11</scala.version>
+        <scala.major.version>2.13</scala.major.version>
+        <scala.version>2.13.12</scala.version>
         <jedis.version>2.6.2</jedis.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-collections4.version>4.3</commons-collections4.version>
         <surefire.plugin.version>3.0.0</surefire.plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <netty.version>4.1.93.Final</netty.version>
+        <guice.version>5.1.0</guice.version>
     </properties>
 
     <modules>
@@ -44,6 +49,7 @@
     </modules>
 
     <dependencies>
+        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -51,10 +57,32 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Logging (SLF4J + Logback) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-classic</artifactId>
+            <version>0.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>0.2.0-RC2</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Jacoco -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
