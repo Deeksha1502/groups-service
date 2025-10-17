@@ -1,8 +1,9 @@
 package validators;
 
 import com.google.common.collect.Lists;
-
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,6 +15,9 @@ import org.sunbird.common.message.ResponseCode;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.util.JsonKey;
 import org.sunbird.util.LoggerUtil;
+import scala.collection.Iterator;
+import scala.collection.Seq;
+import scala.Tuple2;
 
 public class GroupUpdateRequestValidator implements IRequestValidator {
 
@@ -23,6 +27,17 @@ public class GroupUpdateRequestValidator implements IRequestValidator {
   public boolean validate(Request request) throws BaseException {
     logger.info(request.getContext(),"Validating the update group request "+request.getRequest());
     try {
+      Map<String, Object> requestMap = request.getRequest();
+      // Convert members and activities if they are Scala collections
+      Object members = requestMap.get(JsonKey.MEMBERS);
+      if (members != null && members.getClass().getName().startsWith("scala.collection")) {
+        requestMap.put(JsonKey.MEMBERS, convertScalaCollectionToJava(members));
+      }
+      Object activities = requestMap.get(JsonKey.ACTIVITIES);
+      if (activities != null && activities.getClass().getName().startsWith("scala.collection")) {
+        requestMap.put(JsonKey.ACTIVITIES, convertScalaCollectionToJava(activities));
+      }
+
       ValidationUtil.validateRequestObject(request);
       if (request.getRequest().containsKey(JsonKey.NAME)) {
         ValidationUtil.validateMandatoryParamsWithType(
@@ -49,6 +64,28 @@ public class GroupUpdateRequestValidator implements IRequestValidator {
       logger.error(request.getContext(), MessageFormat.format("GroupUpdateRequestValidator: Error Code: {0}, ErrMsg {1}",ResponseCode.GS_UDT02.getErrorCode(),ex.getMessage()),baseException);
       throw baseException;
     }
+  }
+
+  private Object convertScalaCollectionToJava(Object obj) {
+    if (obj instanceof scala.collection.Map) {
+        scala.collection.Map<String, Object> scalaMap = (scala.collection.Map<String, Object>) obj;
+        Map<String, Object> javaMap = new HashMap<>();
+        Iterator<Tuple2<String, Object>> iterator = scalaMap.iterator();
+        while (iterator.hasNext()) {
+            Tuple2<String, Object> tuple = iterator.next();
+            javaMap.put(tuple._1(), convertScalaCollectionToJava(tuple._2()));
+        }
+        return javaMap;
+    } else if (obj instanceof scala.collection.Seq) {
+        scala.collection.Seq<Object> scalaSeq = (scala.collection.Seq<Object>) obj;
+        List<Object> javaList = new ArrayList<>();
+        Iterator<Object> iterator = scalaSeq.iterator();
+        while (iterator.hasNext()) {
+            javaList.add(convertScalaCollectionToJava(iterator.next()));
+        }
+        return javaList;
+    }
+    return obj;
   }
 
   /**
