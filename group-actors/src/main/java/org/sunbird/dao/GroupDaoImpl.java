@@ -57,8 +57,10 @@ public class GroupDaoImpl implements GroupDao {
 
   @Override
   public Response updateGroup(Group groupObj, Map<String,Object> reqContext) throws BaseException {
-    Map<String, Object> map = mapper.convertValue(groupObj, Map.class);
+    Map<String, Object> map = mapper.convertValue(groupObj, new TypeReference<Map<String, Object>>() {});
     map.put(JsonKey.UPDATED_ON, new Timestamp(Calendar.getInstance().getTime().getTime()));
+    // Apply the same fix as in createGroup for the activities field
+    map.put(JsonKey.ACTIVITIES, groupObj.getActivities());
     Response responseObj =
         cassandraOperation.updateRecord(DBUtil.KEY_SPACE_NAME, GROUP_TABLE_NAME, map, reqContext);
     return responseObj;
