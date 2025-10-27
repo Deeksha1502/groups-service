@@ -2,7 +2,8 @@ package org.sunbird.cache.impl
 
 
 import org.scalatest._
-import org.scalatest.{AsyncFlatSpec, BeforeAndAfterAll, Matchers}
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.immutable.Stream.Empty
 import scala.concurrent.Future
