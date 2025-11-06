@@ -230,7 +230,7 @@ public class ValidationUtil {
       if (scalaMapClass.isInstance(obj)) {
         // Convert Scala Map to Java Map using reflection
         Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
-        Map<String, Object> javaMap = new java.util.HashMap<>();
+        Map<String, Object> javaMap = new HashMap<>();
         
         // Use reflection to iterate through Scala iterator
         while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
