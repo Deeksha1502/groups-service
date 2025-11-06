@@ -97,11 +97,12 @@ public class ValidationUtil {
               throw new ValidationException.MandatoryParamMissing(key, parentKey);
             }
           }
-        } catch (Exception e) {
-          // If we can't check Scala collection emptiness, throw the mandatory param missing exception
-          logger.error(reqContext, "Could not validate Scala collection emptiness: " + e.getMessage());
-          throw new ValidationException.MandatoryParamMissing(key, parentKey);
+        } catch (ReflectiveOperationException e) {
+          // If reflection fails, treat as unable to validate emptiness
+          logger.error(reqContext, "Could not validate Scala collection emptiness via reflection: " + e.getMessage());
+          throw new ValidationException.ValidationError("Could not validate Scala collection emptiness for param: " + key, parentKey);
         }
+        // Let other exceptions propagate (runtime exceptions, etc.)
       }
     }
   }
