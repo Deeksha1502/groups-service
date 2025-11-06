@@ -61,7 +61,7 @@ public class GroupDaoImpl implements GroupDao {
     Map<String, Object> map = mapper.convertValue(groupObj, new TypeReference<Map<String, Object>>() {});
     
     // Remove null values to prevent overwriting existing data
-    map.values().removeIf(value -> value == null);
+    map.entrySet().removeIf(entry -> entry.getValue() == null);
     
     // Always update the timestamp
     map.put(JsonKey.UPDATED_ON, new Timestamp(Calendar.getInstance().getTime().getTime()));
