@@ -298,6 +298,10 @@
                         <include>**/*Spec.java</include>
                         <include>**/*Test.java</include>
                     </includes>
+                    <!--
+                         The @{argLine} placeholder preserves arguments from other plugins (such as JaCoCo).
+                         Do not remove it, or you may break integration with those plugins.
+                    -->
                     <argLine>@{argLine}
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.lang.reflect=ALL-UNNAMED
