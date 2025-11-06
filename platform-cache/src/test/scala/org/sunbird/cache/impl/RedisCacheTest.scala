@@ -1,7 +1,6 @@
 package org.sunbird.cache.impl
 
 
-import org.scalatest._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
