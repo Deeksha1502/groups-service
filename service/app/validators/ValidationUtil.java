@@ -188,7 +188,7 @@ public class ValidationUtil {
       if (scalaIterableClass.isInstance(obj)) {
         // Convert Scala collection to Java List using reflection
         Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
-        List<T> javaList = new java.util.ArrayList<>();
+        List<T> javaList = new ArrayList<>();
         
         // Use reflection to iterate through Scala iterator
         while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
