@@ -27,11 +27,11 @@ public class GroupUpdateRequestValidator implements IRequestValidator {
       // Convert members and activities if they are Scala collections
       Object members = requestMap.get(JsonKey.MEMBERS);
       if (members != null && members.getClass().getName().startsWith("scala.collection")) {
-        requestMap.put(JsonKey.MEMBERS, ValidationUtil.convertScalaCollectionToJava(members));
+        requestMap.put(JsonKey.MEMBERS, ValidationUtil.convertScalaCollectionToJavaCollection(members));
       }
       Object activities = requestMap.get(JsonKey.ACTIVITIES);
       if (activities != null && activities.getClass().getName().startsWith("scala.collection")) {
-        requestMap.put(JsonKey.ACTIVITIES, ValidationUtil.convertScalaCollectionToJava(activities));
+        requestMap.put(JsonKey.ACTIVITIES, ValidationUtil.convertScalaCollectionToJavaCollection(activities));
       }
 
       ValidationUtil.validateRequestObject(request);

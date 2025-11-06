@@ -258,22 +258,22 @@ public class ValidationUtil {
    * @param obj The object to convert (can be Scala Map, Scala Seq, or any other object)
    * @return Converted Java collection or the original object if not a Scala collection
    */
-  public static Object convertScalaCollectionToJava(Object obj) {
+  public static Object convertScalaCollectionToJavaCollection(Object obj) {
     if (obj instanceof scala.collection.Map) {
       scala.collection.Map<String, Object> scalaMap = (scala.collection.Map<String, Object>) obj;
-      Map<String, Object> javaMap = new HashMap<>();
+      Map<String, Object> javaMap = new HashMap<>(scalaMap.size());
       Iterator<Tuple2<String, Object>> iterator = scalaMap.iterator();
       while (iterator.hasNext()) {
         Tuple2<String, Object> tuple = iterator.next();
-        javaMap.put(tuple._1(), convertScalaCollectionToJava(tuple._2()));
+        javaMap.put(tuple._1(), convertScalaCollectionToJavaCollection(tuple._2()));
       }
       return javaMap;
     } else if (obj instanceof scala.collection.Seq) {
       scala.collection.Seq<Object> scalaSeq = (scala.collection.Seq<Object>) obj;
-      List<Object> javaList = new ArrayList<>();
+      List<Object> javaList = new ArrayList<>(scalaSeq.size());
       Iterator<Object> iterator = scalaSeq.iterator();
       while (iterator.hasNext()) {
-        javaList.add(convertScalaCollectionToJava(iterator.next()));
+        javaList.add(convertScalaCollectionToJavaCollection(iterator.next()));
       }
       return javaList;
     }

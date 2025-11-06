@@ -19,8 +19,8 @@ public class GroupSearchRequestValidator implements validators.IRequestValidator
     try {
       Map<String, Object> requestMap = request.getRequest();
       Object filters = requestMap.get(JsonKey.FILTERS);
-      if (filters != null && filters.getClass().getName().startsWith("scala.collection")) {
-        requestMap.put(JsonKey.FILTERS, ValidationUtil.convertScalaCollectionToJava(filters));
+      if (filters != null && (filters instanceof scala.collection.Map || filters instanceof scala.collection.Seq)) {
+        requestMap.put(JsonKey.FILTERS, ValidationUtil.convertScalaCollectionToJavaCollection(filters));
       }
 
       validators.ValidationUtil.validateRequestObject(request);
