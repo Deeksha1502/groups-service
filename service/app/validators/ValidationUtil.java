@@ -1,6 +1,8 @@
 package validators;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +10,8 @@ import org.sunbird.common.exception.BaseException;
 import org.sunbird.common.exception.ValidationException;
 import org.sunbird.common.request.Request;
 import org.sunbird.util.LoggerUtil;
+import scala.Tuple2;
+import scala.collection.Iterator;
 
 public class ValidationUtil {
 
@@ -245,5 +249,34 @@ public class ValidationUtil {
     
     // If not a map, return null
     return null;
+  }
+
+  /**
+   * Recursively converts Scala collections (Map and Seq) to Java collections (Map and List).
+   * This method handles nested Scala collections and converts them to their Java equivalents.
+   *
+   * @param obj The object to convert (can be Scala Map, Scala Seq, or any other object)
+   * @return Converted Java collection or the original object if not a Scala collection
+   */
+  public static Object convertScalaCollectionToJava(Object obj) {
+    if (obj instanceof scala.collection.Map) {
+      scala.collection.Map<String, Object> scalaMap = (scala.collection.Map<String, Object>) obj;
+      Map<String, Object> javaMap = new HashMap<>();
+      Iterator<Tuple2<String, Object>> iterator = scalaMap.iterator();
+      while (iterator.hasNext()) {
+        Tuple2<String, Object> tuple = iterator.next();
+        javaMap.put(tuple._1(), convertScalaCollectionToJava(tuple._2()));
+      }
+      return javaMap;
+    } else if (obj instanceof scala.collection.Seq) {
+      scala.collection.Seq<Object> scalaSeq = (scala.collection.Seq<Object>) obj;
+      List<Object> javaList = new ArrayList<>();
+      Iterator<Object> iterator = scalaSeq.iterator();
+      while (iterator.hasNext()) {
+        javaList.add(convertScalaCollectionToJava(iterator.next()));
+      }
+      return javaList;
+    }
+    return obj;
   }
 }
