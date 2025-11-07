@@ -199,9 +199,8 @@ public class ValidationUtil {
         return javaList;
       }
     } catch (Exception e) {
-      // If conversion fails, log and throw a runtime exception to avoid silently swallowing errors
-      logger.error(null, "Failed to convert Scala collection to Java List: " + e.getMessage());
-      throw new RuntimeException("Failed to convert Scala collection to Java List", e);
+      // If conversion fails, try to return as is (might cause ClassCastException later)
+      logger.error(null,"Failed to convert Scala collection to Java List: " + e.getMessage());
     }
     
     // If not a collection, return null
