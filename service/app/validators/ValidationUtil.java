@@ -200,7 +200,7 @@ public class ValidationUtil {
       }
     } catch (Exception e) {
       // If conversion fails, try to return as is (might cause ClassCastException later)
-      logger.error(null,"Failed to convert Scala collection to Java List: " + e.getMessage());
+      logger.error(null, "Failed to convert Scala collection to Java List: " + e.getMessage());
     }
     
     // If not a collection, return null

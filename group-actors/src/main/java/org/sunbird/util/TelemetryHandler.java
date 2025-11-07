@@ -15,6 +15,93 @@ import java.util.Map;
 
 public class TelemetryHandler {
 
+    /**
+     * Converts Scala collections to Java List.
+     * Handles both Java List and Scala collections.
+     *
+     * @param obj The object to convert
+     * @return Java List or null if obj is null
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> List<T> convertToJavaList(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        
+        // If it's already a Java List, return it
+        if (obj instanceof List) {
+            return (List<T>) obj;
+        }
+        
+        // Handle Scala collections
+        try {
+            Class<?> scalaIterableClass = Class.forName("scala.collection.Iterable");
+            if (scalaIterableClass.isInstance(obj)) {
+                // Convert Scala collection to Java List using reflection
+                Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
+                List<T> javaList = new java.util.ArrayList<>();
+                
+                // Use reflection to iterate through Scala iterator
+                while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
+                    T element = (T) iterator.getClass().getMethod("next").invoke(iterator);
+                    javaList.add(element);
+                }
+                return javaList;
+            }
+        } catch (Exception e) {
+            // If conversion fails, return empty list to prevent ClassCastException
+            return new ArrayList<>();
+        }
+        
+        // If not a collection, return empty list
+        return new ArrayList<>();
+    }
+
+    /**
+     * Converts Scala Map to Java Map.
+     * Handles both Java Map and Scala Map.
+     *
+     * @param obj The object to convert
+     * @return Java Map or null if obj is null
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> convertToJavaMap(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        
+        // If it's already a Java Map, return it
+        if (obj instanceof Map) {
+            return (Map<String, Object>) obj;
+        }
+        
+        // Handle Scala Map
+        try {
+            Class<?> scalaMapClass = Class.forName("scala.collection.Map");
+            if (scalaMapClass.isInstance(obj)) {
+                // Convert Scala Map to Java Map using reflection
+                Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
+                Map<String, Object> javaMap = new java.util.HashMap<>();
+                
+                // Use reflection to iterate through Scala iterator
+                while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
+                    Object tuple = iterator.getClass().getMethod("next").invoke(iterator);
+                    // Scala tuple has _1() for key and _2() for value
+                    Object key = tuple.getClass().getMethod("_1").invoke(tuple);
+                    Object value = tuple.getClass().getMethod("_2").invoke(tuple);
+                    javaMap.put((String) key, value);
+                }
+                return javaMap;
+            }
+        } catch (Exception e) {
+            // If conversion fails, return empty map to prevent ClassCastException
+            return new java.util.HashMap<>();
+        }
+        
+        // If not a map, return empty map
+        return new java.util.HashMap<>();
+    }
+
     public static void logGroupCreateTelemetry(Request actorMessage, String groupId){
         String source =
                 actorMessage.getContext().get(org.sunbird.common.util.JsonKey.REQUEST_SOURCE) != null
@@ -139,14 +226,19 @@ public class TelemetryHandler {
             TelemetryUtil.generateCorrelatedObject(
                     source, StringUtils.capitalize(JsonKey.REQUEST_SOURCE), null, correlatedObject);
         }
-        List<Map<String,Object>> groups =(List<Map<String, Object>>) actorMessage.getRequest().get(JsonKey.GROUPS);
-        for (Map<String,Object> group:groups) {
-            // Add group info information to Cdata
-            TelemetryUtil.generateCorrelatedObject(
-                    (String) group.get(JsonKey.GROUP_ID),
-                    TelemetryEnvKey.GROUPID,
-                    null,
-                    correlatedObject);
+        List<Object> groups = convertToJavaList(actorMessage.getRequest().get(JsonKey.GROUPS));
+        if (groups != null) {
+        for (Object groupObj : groups) {
+            Map<String,Object> group = convertToJavaMap(groupObj);
+            if (group != null) {
+                // Add group info information to Cdata
+                TelemetryUtil.generateCorrelatedObject(
+                        (String) group.get(JsonKey.GROUP_ID),
+                        TelemetryEnvKey.GROUPID,
+                        null,
+                        correlatedObject);
+            }
+        }
         }
         Map<String, Object> targetObject = null;
         if(isSuccess) {
