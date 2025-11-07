@@ -90,7 +90,7 @@ public class CollectionConverterUtil {
                 return javaMap;
             }
         } catch (Exception e) {
-            // If conversion fails, return empty map to prevent ClassCastException
+            // If conversion fails (e.g., due to reflection exceptions), return empty map to prevent errors from propagating
             return new HashMap<>();
         }
         
