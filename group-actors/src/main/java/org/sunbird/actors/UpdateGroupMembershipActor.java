@@ -32,74 +32,6 @@ public class UpdateGroupMembershipActor extends BaseActor {
   private CacheUtil cacheUtil = new CacheUtil();
   private LoggerUtil logger = new LoggerUtil(UpdateGroupMembershipActor.class);
 
-  /**
-   * Converts Scala collections to Java List.
-   * Handles both Java List and Scala collections.
-   */
-  @SuppressWarnings("unchecked")
-  private static <T> List<T> convertToJavaList(Object obj) {
-    if (obj == null) {
-      return null;
-    }
-    
-    if (obj instanceof List) {
-      return (List<T>) obj;
-    }
-    
-    try {
-      Class<?> scalaIterableClass = Class.forName("scala.collection.Iterable");
-      if (scalaIterableClass.isInstance(obj)) {
-        Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
-        List<T> javaList = new ArrayList<>();
-        
-        while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
-          T element = (T) iterator.getClass().getMethod("next").invoke(iterator);
-          javaList.add(element);
-        }
-        return javaList;
-      }
-    } catch (Exception e) {
-      return new ArrayList<>();
-    }
-    
-    return new ArrayList<>();
-  }
-
-  /**
-   * Converts Scala Map to Java Map.
-   * Handles both Java Map and Scala Map.
-   */
-  @SuppressWarnings("unchecked")
-  private static Map<String, Object> convertToJavaMap(Object obj) {
-    if (obj == null) {
-      return null;
-    }
-    
-    if (obj instanceof Map) {
-      return (Map<String, Object>) obj;
-    }
-    
-    try {
-      Class<?> scalaMapClass = Class.forName("scala.collection.Map");
-      if (scalaMapClass.isInstance(obj)) {
-        Object iterator = obj.getClass().getMethod("iterator").invoke(obj);
-        Map<String, Object> javaMap = new HashMap<>();
-        
-        while ((Boolean) iterator.getClass().getMethod("hasNext").invoke(iterator)) {
-          Object tuple = iterator.getClass().getMethod("next").invoke(iterator);
-          Object key = tuple.getClass().getMethod("_1").invoke(tuple);
-          Object value = tuple.getClass().getMethod("_2").invoke(tuple);
-          javaMap.put((String) key, value);
-        }
-        return javaMap;
-      }
-    } catch (Exception e) {
-      return new HashMap<>();
-    }
-    
-    return new HashMap<>();
-  }
-
   @Override
   public void onReceive(Request request) throws Throwable {
     String operation = request.getOperation();
@@ -126,11 +58,11 @@ public class UpdateGroupMembershipActor extends BaseActor {
       }
 
     logger.info(actorMessage.getContext(),MessageFormat.format("Update groups details for the userId {0}", userId));
-    List<Object> groupsRaw = convertToJavaList(actorMessage.getRequest().get(JsonKey.GROUPS));
+    List<Object> groupsRaw = CollectionConverterUtil.convertToJavaList(actorMessage.getRequest().get(JsonKey.GROUPS));
     List<Map<String, Object>> groups = new ArrayList<>();
     if (groupsRaw != null) {
       for (Object groupObj : groupsRaw) {
-        Map<String, Object> group = convertToJavaMap(groupObj);
+        Map<String, Object> group = CollectionConverterUtil.convertToJavaMap(groupObj);
         if (group != null) {
           groups.add(group);
         }
