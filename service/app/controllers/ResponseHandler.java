@@ -52,7 +52,13 @@ public class ResponseHandler {
         break;
     }
     logTelemetry(response, request);
-    PrintEntryExitLog.printExitLogOnFailure(request, (BaseException) exception);
+    // Handle both BaseException and other exceptions
+    if (exception instanceof BaseException) {
+      PrintEntryExitLog.printExitLogOnFailure(request, (BaseException) exception);
+    } else {
+      // Log the actual exception for debugging
+      logger.error("Non-BaseException caught: {} - {}", exception.getClass().getName(), exception.toString(), exception instanceof Exception ? (Exception) exception : null);
+    }
     return result;
   }
   /**
