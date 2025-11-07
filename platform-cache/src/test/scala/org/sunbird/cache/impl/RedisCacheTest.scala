@@ -3,6 +3,8 @@ package org.sunbird.cache.impl
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Ignore
 
 import scala.collection.immutable.Stream.Empty
 import scala.concurrent.Future
@@ -12,7 +14,7 @@ class RedisCacheTest extends AsyncFlatSpec with Matchers with BeforeAndAfterAll 
 
 	var cons_message: String = ""
 
-	override def afterAll() {
+	override def afterAll(): Unit = {
 		RedisCache.deleteByPattern("kptest*")
 	}
 

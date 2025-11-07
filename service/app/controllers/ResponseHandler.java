@@ -57,7 +57,7 @@ public class ResponseHandler {
       PrintEntryExitLog.printExitLogOnFailure(request, (BaseException) exception);
     } else {
       // Log the actual exception for debugging
-      logger.error("Non-BaseException caught: {} - {}", exception.getClass().getName(), exception.toString(), exception instanceof Exception ? (Exception) exception : null);
+      logger.error(null, "Non-BaseException caught: " + exception.getClass().getName() + " - " + exception.toString(), exception instanceof Exception ? (Exception) exception : null);
     }
     return result;
   }
