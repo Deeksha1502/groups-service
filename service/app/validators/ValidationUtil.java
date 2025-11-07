@@ -245,13 +245,13 @@ public class ValidationUtil {
         return javaMap;
       }
     } catch (Exception e) {
-      // If conversion fails, log error and return empty map to avoid NullPointerException
+      // If conversion fails, log error and throw RuntimeException to avoid masking errors
       logger.error("convertToJavaMap", "Failed to convert Scala Map to Java Map: " + e.getMessage());
-      return new HashMap<>();
+      throw new RuntimeException("Failed to convert Scala Map to Java Map", e);
     }
     
-    // If not a map, return empty map
-    return new HashMap<>();
+    // If not a map, return null
+    return null;
   }
 
   /**
