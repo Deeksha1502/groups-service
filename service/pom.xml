@@ -13,12 +13,8 @@
     <packaging>play2</packaging>
     <repositories>
         <repository>
-            <id>scalaz-bintray</id>
-            <name>Scalaz Bintray - releases</name>
-            <url>https://dl.bintray.com/scalaz/releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>maven-central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -42,7 +38,7 @@
         </dependency>
         <!-- Add actor here itself to avoid netty jar conflict. -->
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-netty-server_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <scope>runtime</scope>
@@ -60,10 +56,10 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec-http</artifactId>
-            <version>4.1.44.Final</version>
+            <version>${netty.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-guice_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
@@ -76,6 +72,14 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-reflect</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -86,6 +90,14 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-reflect</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -117,12 +129,39 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+          <groupId>ch.qos.logback.contrib</groupId>
+          <artifactId>logback-json-classic</artifactId>
+          <version>0.1.5</version>
+          <exclusions>
+            <exclusion>
+              <groupId>ch.qos.logback</groupId>
+              <artifactId>logback-classic</artifactId>
+            </exclusion>
+          </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.playframework</groupId>
             <artifactId>play_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <exclusions>
@@ -152,15 +191,21 @@
             <version>4.5.14</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-testkit_${scala.major.version}</artifactId>
-            <version>${typesafe.akka.version}</version>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-testkit_${scala.major.version}</artifactId>
+            <version>${pekko.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-        <groupId>com.typesafe.play</groupId>
+        <groupId>org.playframework</groupId>
         <artifactId>play-logback_${scala.major.version}</artifactId>
         <version>${play2.version}</version>
+        <exclusions>
+            <exclusion>
+                <artifactId>slf4j-api</artifactId>
+                <groupId>org.slf4j</groupId>
+            </exclusion>
+        </exclusions>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
@@ -192,13 +237,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
-            <artifactId>filters-helpers_${scala.major.version}</artifactId>
+            <groupId>org.playframework</groupId>
+            <artifactId>play-filters-helpers_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.typesafe.play</groupId>
-            <artifactId>play-akka-http-server_${scala.major.version}</artifactId>
+            <groupId>org.playframework</groupId>
+            <artifactId>play-pekko-http-server_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
         </dependency>
         <dependency>
@@ -208,7 +253,7 @@
         </dependency>
         <!--Play Helper Class for Testing Controllers  -->
         <dependency>
-            <groupId>com.typesafe.play</groupId>
+            <groupId>org.playframework</groupId>
             <artifactId>play-test_${scala.major.version}</artifactId>
             <version>${play2.version}</version>
             <scope>test</scope>
@@ -253,6 +298,24 @@
                         <include>**/*Spec.java</include>
                         <include>**/*Test.java</include>
                     </includes>
+                    <!--
+                         The @{argLine} placeholder preserves arguments from other plugins (such as JaCoCo).
+                         Do not remove it, or you may break integration with those plugins.
+                    -->
+                    <argLine>@{argLine}
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.util.concurrent=ALL-UNNAMED
+                        --add-opens java.base/java.io=ALL-UNNAMED
+                        --add-opens java.base/sun.security.x509=ALL-UNNAMED
+                        --add-opens java.base/sun.security.util=ALL-UNNAMED
+                        --add-opens java.base/java.nio.charset=ALL-UNNAMED
+                        --add-opens java.base/java.security=ALL-UNNAMED
+                        --add-opens java.base/java.time=ALL-UNNAMED
+                        --add-opens java.base/java.net=ALL-UNNAMED
+                        --add-opens java.base/sun.nio.ch=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,8 +1,8 @@
 package validators;
 
 import com.google.common.collect.Lists;
-
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
@@ -23,6 +23,17 @@ public class GroupUpdateRequestValidator implements IRequestValidator {
   public boolean validate(Request request) throws BaseException {
     logger.info(request.getContext(),"Validating the update group request "+request.getRequest());
     try {
+      Map<String, Object> requestMap = request.getRequest();
+      // Convert members and activities if they are Scala collections
+      Object members = requestMap.get(JsonKey.MEMBERS);
+      if (members != null && members.getClass().getName().startsWith("scala.collection")) {
+        requestMap.put(JsonKey.MEMBERS, ValidationUtil.convertScalaCollectionToJavaCollection(members));
+      }
+      Object activities = requestMap.get(JsonKey.ACTIVITIES);
+      if (activities != null && activities.getClass().getName().startsWith("scala.collection")) {
+        requestMap.put(JsonKey.ACTIVITIES, ValidationUtil.convertScalaCollectionToJavaCollection(activities));
+      }
+
       ValidationUtil.validateRequestObject(request);
       if (request.getRequest().containsKey(JsonKey.NAME)) {
         ValidationUtil.validateMandatoryParamsWithType(

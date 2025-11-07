@@ -52,21 +52,23 @@ public class GroupCreateRequestValidator implements IRequestValidator {
     Map<String, List<String>> paramValue = new HashMap<>();
     paramValue.put(JsonKey.STATUS, Lists.newArrayList(JsonKey.ACTIVE, JsonKey.INACTIVE));
     paramValue.put(JsonKey.ROLE, Lists.newArrayList(JsonKey.ADMIN, JsonKey.MEMBER));
-    List<Map<String, Object>> memberList =
-        (List<Map<String, Object>>) request.getRequest().get(JsonKey.MEMBERS);
-    if (CollectionUtils.isNotEmpty(memberList)) {
-      for (Map<String, Object> member : memberList) {
+    Object membersObj = request.getRequest().get(JsonKey.MEMBERS);
+    List<Object> memberObjectList = ValidationUtil.convertToJavaList(membersObj);
+    if (CollectionUtils.isNotEmpty(memberObjectList)) {
+      for (Object memberObj : memberObjectList) {
+        Map<String, Object> member = ValidationUtil.convertToJavaMap(memberObj);
+        int index = memberObjectList.indexOf(memberObj);
         ValidationUtil.validateMandatoryParamsWithType(
             member,
             Lists.newArrayList(JsonKey.USER_ID),
             String.class,
             true,
-            JsonKey.MEMBERS + "[" + memberList.indexOf(member) + "]",request.getContext());
+            JsonKey.MEMBERS + "[" + index + "]",request.getContext());
         ValidationUtil.validateParamValue(
             member,
             Lists.newArrayList(JsonKey.STATUS, JsonKey.ROLE),
             paramValue,
-            JsonKey.MEMBERS + "[" + memberList.indexOf(member) + "]",request.getContext());
+            JsonKey.MEMBERS + "[" + index + "]",request.getContext());
       }
     }
   }
@@ -78,16 +80,18 @@ public class GroupCreateRequestValidator implements IRequestValidator {
    * @throws BaseException
    */
   private void validateActivityList(Request request) throws BaseException {
-    List<Map<String, Object>> activityList =
-        (List<Map<String, Object>>) request.getRequest().get(JsonKey.ACTIVITIES);
-    if (CollectionUtils.isNotEmpty(activityList)) {
-      for (Map<String, Object> activity : activityList) {
+    Object activitiesObj = request.getRequest().get(JsonKey.ACTIVITIES);
+    List<Object> activityObjectList = ValidationUtil.convertToJavaList(activitiesObj);
+    if (CollectionUtils.isNotEmpty(activityObjectList)) {
+      for (Object activityObj : activityObjectList) {
+        Map<String, Object> activity = ValidationUtil.convertToJavaMap(activityObj);
+        int index = activityObjectList.indexOf(activityObj);
         ValidationUtil.validateMandatoryParamsWithType(
             activity,
             Lists.newArrayList(JsonKey.ID, JsonKey.TYPE),
             String.class,
             true,
-            JsonKey.ACTIVITIES + "[" + activityList.indexOf(activity) + "]", request.getContext());
+            JsonKey.ACTIVITIES + "[" + index + "]", request.getContext());
       }
     }
   }

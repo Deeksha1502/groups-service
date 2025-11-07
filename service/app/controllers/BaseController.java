@@ -2,9 +2,9 @@ package controllers;
 
 import static controllers.ResponseHandler.handleResponse;
 
-import akka.actor.ActorRef;
-import akka.pattern.Patterns;
-import akka.util.Timeout;
+import org.apache.pekko.actor.ActorRef;
+import org.apache.pekko.pattern.Patterns;
+import org.apache.pekko.util.Timeout;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -18,7 +18,7 @@ import org.sunbird.common.exception.ValidationException;
 import org.sunbird.common.request.Request;
 import play.mvc.Controller;
 import play.mvc.Result;
-import scala.compat.java8.FutureConverters;
+import scala.jdk.javaapi.FutureConverters;
 import scala.concurrent.Future;
 import utils.module.PrintEntryExitLog;
 import utils.module.RequestMapper;
@@ -101,7 +101,7 @@ public class BaseController extends Controller {
     ActorRef actorRef = getActorRef(request.getOperation());
     if (actorRef != null) {
       Future<Object> future = Patterns.ask(actorRef, request, timeout);
-      return FutureConverters.toJava(future).thenApplyAsync(fn);
+      return FutureConverters.asJava(future).thenApplyAsync(fn);
     } else {
       return CompletableFuture.supplyAsync(
           () -> handleResponse(new ActorServiceException.InvalidOperationName(null), request));
