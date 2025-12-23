@@ -1,6 +1,6 @@
 package org.sunbird.notifications;
 
-import akka.actor.ActorRef;
+import org.apache.pekko.actor.ActorRef;
 import org.sunbird.Application;
 import org.sunbird.common.request.Request;
 import org.sunbird.models.ActorOperations;

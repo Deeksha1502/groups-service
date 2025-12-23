@@ -1,7 +1,6 @@
 package validators;
 
 import com.google.common.collect.Lists;
-
 import java.text.MessageFormat;
 import java.util.Map;
 import org.sunbird.common.exception.BaseException;
@@ -18,6 +17,12 @@ public class GroupSearchRequestValidator implements validators.IRequestValidator
   public boolean validate(Request request) throws BaseException {
     logger.info(request.getContext(),"Validating the search group request "+ request.getRequest());
     try {
+      Map<String, Object> requestMap = request.getRequest();
+      Object filters = requestMap.get(JsonKey.FILTERS);
+      if (filters != null && (filters instanceof scala.collection.Map || filters instanceof scala.collection.Seq)) {
+        requestMap.put(JsonKey.FILTERS, ValidationUtil.convertScalaCollectionToJavaCollection(filters));
+      }
+
       validators.ValidationUtil.validateRequestObject(request);
       validators.ValidationUtil.validateMandatoryParamsWithType(
               request.getRequest(),

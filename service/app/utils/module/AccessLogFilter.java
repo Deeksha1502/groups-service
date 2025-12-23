@@ -1,6 +1,6 @@
 package utils.module;
 
-import akka.util.ByteString;
+import org.apache.pekko.util.ByteString;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.concurrent.Executor;
 import javax.inject.Inject;
