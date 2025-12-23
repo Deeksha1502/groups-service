@@ -139,14 +139,19 @@ public class TelemetryHandler {
             TelemetryUtil.generateCorrelatedObject(
                     source, StringUtils.capitalize(JsonKey.REQUEST_SOURCE), null, correlatedObject);
         }
-        List<Map<String,Object>> groups =(List<Map<String, Object>>) actorMessage.getRequest().get(JsonKey.GROUPS);
-        for (Map<String,Object> group:groups) {
-            // Add group info information to Cdata
-            TelemetryUtil.generateCorrelatedObject(
-                    (String) group.get(JsonKey.GROUP_ID),
-                    TelemetryEnvKey.GROUPID,
-                    null,
-                    correlatedObject);
+        List<Object> groups = CollectionConverterUtil.convertToJavaList(actorMessage.getRequest().get(JsonKey.GROUPS));
+        if (groups != null) {
+        for (Object groupObj : groups) {
+            Map<String,Object> group = CollectionConverterUtil.convertToJavaMap(groupObj);
+            if (group != null) {
+                // Add group info information to Cdata
+                TelemetryUtil.generateCorrelatedObject(
+                        (String) group.get(JsonKey.GROUP_ID),
+                        TelemetryEnvKey.GROUPID,
+                        null,
+                        correlatedObject);
+            }
+        }
         }
         Map<String, Object> targetObject = null;
         if(isSuccess) {

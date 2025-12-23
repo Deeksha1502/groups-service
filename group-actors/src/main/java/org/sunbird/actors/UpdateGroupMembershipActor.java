@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
@@ -57,8 +58,16 @@ public class UpdateGroupMembershipActor extends BaseActor {
       }
 
     logger.info(actorMessage.getContext(),MessageFormat.format("Update groups details for the userId {0}", userId));
-    List<Map<String, Object>> groups =
-        (List<Map<String, Object>>) actorMessage.getRequest().get(JsonKey.GROUPS);
+    List<Object> groupsRaw = CollectionConverterUtil.convertToJavaList(actorMessage.getRequest().get(JsonKey.GROUPS));
+    List<Map<String, Object>> groups = new ArrayList<>();
+    if (groupsRaw != null) {
+      for (Object groupObj : groupsRaw) {
+        Map<String, Object> group = CollectionConverterUtil.convertToJavaMap(groupObj);
+        if (group != null) {
+          groups.add(group);
+        }
+      }
+    }
 
       List<Member> members = createMembersUpdateRequest(groups, userId);
     Response response = new Response();
